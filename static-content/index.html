@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta HTTP-EQUIV="EXPIRES" CONTENT="-1">
+		<title>Computing Science 309 Warehouse Wars</title>
+        <link rel="stylesheet" type="text/css" href="style.css" />
+		<script language="javascript" src="jquery-3.3.1.min.js" > </script>
+		<script language="javascript" src="ww.js" > </script>
+        <script language="javascript" src="wwClient.js" > </script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-app.js"></script>
+
+        <!-- If you enabled Analytics in your project, add the Firebase SDK for Analytics -->
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-analytics.js"></script>
+      
+        <!-- Add Firebase products that you want to use -->
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-auth.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-database.js"></script>
+        <script src="https://www.gstatic.com/firebasejs/7.6.0/firebase-firestore.js"></script>
+        
+	</head>
+    
+	<body bgcolor="ffffff">
+        
+		<center>
+			<h1>Warehouse Wars</h1>
+            <div class="button" id="profile">
+                <button class="button buttonPlay" id="userProf" type="submit" onclick="return UserProfile();">User Profile</button>
+                <button class="button buttonPlay" id="scoreinfo" type="submit" onclick="return highScore();">Scores</button>
+                <button class="button buttonPlay" id="main" type="submit" >Main Page</button>
+            </div>
+            <div id="UserProfile">
+                <h2>User Profile</h>
+                    
+                <form id = "showprof" class="prof showprof"> </form>
+                <h2>User Scores</h>
+                <form id = "user_scores" class="prof user_scores"> </form>
+                <h2>Update Profile</h>
+                <form>
+                        <p><label for="user_name">User Name </label><input id="update_user_name" type="text" name="name" placeholder="No Special Character"></p>
+                        <p><label for="password">Password </label><input id="updatepasswd" type="password" name="password" placeholder="Maximum 8 characters" ></p>
+                        <p><input id="updatebtn"  type="button" value="Update Profile">
+                            <h6 id = updateMsn> </h6></p>
+                </form>
+                <h2>Delete Account</h>
+                <form>
+                <h6> You will lose all information if you delect account.</h6>
+                <p><input id="btndelete"  type="button" value="Sure to Delete Account?">
+                </form>
+            </div>
+            <div id="Allscores">
+                <h2>All Scores</h>
+                <div id="showScores" class="score"></div>
+            </div>
+            
+            <div id="login">
+                <h2>Please login</h>
+                    <form>
+                                <p><input id="logemail" type="text" name="email" placeholder="User's Email" />
+                                <p><input id="logpw" type="password" name="password" placeholder="Password" />
+                                <p><input id="loginSubmit"  type="button" value="Login"/>
+                                    <input id="newuser" type="button" value ="Signup"/>
+                                <h6 id = loginstatus> </h6>
+                        </form>
+                    <h2>Top 5 Highest Scores</h>
+                        <div id=scores class="score main-score"> </div>
+                    </div>
+            </div>
+            <div id="Signup">
+                <h2>Create account</h>
+                <form>
+                        <p><label for="user">User Name </label><input id="registeruser" type="text"  name="user" placeholder="No special characters">    
+                        <p><label for="email">E-mail </label><input id="registeremail" type="text" name="email" placeholder="Valid email address">
+                        <p><label for="password">Password </label><input id="registerpasswd" type="password" name="password" placeholder="Maximum 8 characters" >
+                        <p><input id="signup" type="button" value="Submit"/><input id="sublogin"  type="button" value="Return to Login">
+                            <h6 id = registerMsn> </h6>
+                </form>
+            </div>
+            
+            <div id="wwgame">
+			<table>
+				<tr>
+					<td> <div id="stage"> </div></td>
+					<td>
+						<center>
+                            <h6 id = "pauseGame"> </h6>
+                            <div>
+                                <label style="display: block; width: 20 px;">Score: </label>
+                                <label style="border: 1 px; display:inline-block; width: 20 px;" id="time"></label>
+                            </div>    
+                            
+                            <div class="button" id="gameControl">
+                                <button class="button buttonPlay" id="btnPlay" type="submit" onclick="return playGame();">Reset</button>
+                                <button class="button buttonPlay" id="btnPause" type="submit" onclick="return pauseGame(true);">Pause</button>
+                                <!-- <button class="button buttonPlay" id="btnContin" type="submit" onclick="return pauseGame(false);">Continue</button> -->
+                                <input type="button" name="Continue" class="button buttonPlay" id="btnContin" value="Continue">
+                                <button class="button buttonPlay" id="btnLogout" type="submit" onclick="return logout();">Logout</button>
+                                
+                                
+                            </div>
+							<h2>Legend</h2>
+							<table class="legend">
+								<tr>
+									<td> <img src="icons/blank.gif" id="blankImage" /> </td>
+									<td> <img src="icons/emblem-package-2-24.png" id="boxImage" /> </td>
+									<td> <img src="icons/face-cool-24.png" id="playerImage" /> </td>
+									<td> <img src="icons/face-devil-grin-24.png" id="monsterImage" /> </td>
+									<td> <img src="icons/wall.jpeg" id="wallImage" /> </td>
+								</tr>
+								<tr>
+									<td> Empty <br/> Square </td>
+									<td> Box </td>
+									<td> Player </td>
+									<td> Monster </td>
+									<td> Wall </td>
+								</tr>
+							</table>
+							<h2>Controls</h2>
+							<table class="controls">
+								<tr>
+                                    <td><img id="nw" src="icons/north_west.svg" /></td>
+									<td><img id="n" src="icons/north.svg" /></td>
+									<td><img id="ne" src="icons/north_east.svg" /></td>
+								</tr>
+								<tr>
+									<td><img id="w" src="icons/west.svg" /></td>
+									<td>&nbsp;</td>
+									<td><img id="e" src="icons/east.svg" /></td>
+								</tr>
+								<tr>
+									<td><img id="sw" src="icons/south_west.svg" /></td>
+									<td><img id="s" src="icons/south.svg" /></td>
+									<td><img id="se" src="icons/south_east.svg" /></td>
+								</tr>
+							</table>
+                            
+						</center>
+					</td>
+				</tr>
+			</table>
+            
+            </div>
+        </center>
+        <script>
+            const firebaseConfig = {
+                apiKey: "AIzaSyA96u7NlxgO4kaq7BAwfZr7qtW7fslIQhg",
+            authDomain: "warehouse-wars-game.firebaseapp.com",
+            databaseURL: "https://warehouse-wars-game.firebaseio.com",
+            projectId: "warehouse-wars-game",
+            storageBucket: "warehouse-wars-game.appspot.com",
+            messagingSenderId: "771081758694",
+            appId: "1:771081758694:web:ea37b2c27f234d4209d827",
+            measurementId: "G-FV1D30MHK9"
+            };
+            firebase.initializeApp(firebaseConfig);
+            const database = firebase.firestore();
+        </script>
+         <!-- <script src="../ww_node.js"></script> -->
+         <!-- <script src="app.js"></script> -->
+	</body>
+</html>
+
